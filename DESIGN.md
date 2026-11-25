@@ -203,7 +203,7 @@ the surface 3.0 / ×5.5 / 4.2. Nothing to port.
 | rac2 | rac1, and the mod |
 |---|---|
 | L2/R2 strafe; L1 looks, R1 crouches | rac1 looks on L1 or L2 (`held & 5`) and crouches on R1 or R2 (`held & 0xA`). `process_report` takes the strafe button(s) out of `held`, `pressed`, `released`, the `raw_` copies, `unk348`, the newest press-history entry and their pressure (`analog[14]` L2, `[15]` R2), and keeps them for the strafe. That happens in play (`cinematic_mode` 0), on foot (vehicle mode 0), in control modes 0, 1, 2, 4, 5, 6, 8 and 0xC, and outside state 0x81, rac1's own strafe-like state. The menus read the `_unmasked` copies, which are left alone |
-| Strafing allowed | follow camera in use (`g_current_follow_cam`, `D_L00_00166F00`: its s16 at `+0x86` is 0; rac1's volume cameras test the same), gravity mode 0, not state 0x10 |
+| Strafing allowed | follow camera in use (`g_current_follow_cam`, `D_L00_00166F00`: its s16 at `+0x86` is 0; rac1's volume cameras test the same), gravity mode 0, or 1 (a surface's) outside the Magneboots' own states 0x3F, 0x70 and 0x71 (`bm_strafe_gravity_ok`), not state 0x10 |
 | Sectors | the mod's own, from the stick axes (`+0x1D20`), as rac2 |
 | Facing | `turn_to_heading` in the run: the camera's yaw (`camera_yaw`, `D_L00_00166ED8`) for the call, rac2's spring values, the strafe's own yaw rate kept by the mod, yaw rate and error zeroed after; then the side factor on `ground_speed` (`+0x194`), as rac2 does before its speed step |
 | Velocity | `set_planar_velocity` in the run: the stick's yaw instead of the facing |

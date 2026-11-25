@@ -9,27 +9,31 @@
 
 /* The hero (g_hero). */
 enum {
-    BM_HERO_FACING = 0x98,            /* motion.rot.z */
-    BM_HERO_MOMENTUM = 0x150,         /* motion.momentum, a vector: idle slides out on it */
-    BM_HERO_SPEED_XY = 0x160,         /* motion.speed_xy: over 2.7 the run exits to STOP */
-    BM_HERO_FLAT_SPEED = 0x164,       /* motion.flat_speed */
-    BM_HERO_MOVE_YAW = 0x180,         /* motion.move_yaw: stick yaw plus camera yaw */
-    BM_HERO_YAW_RATE = 0x184,         /* motion.yaw_rate */
-    BM_HERO_YAW_ERROR = 0x188,        /* motion.yaw_error: move yaw minus facing, after the turn */
-    BM_HERO_TARGET_SPEED = 0x190,     /* target_speed */
-    BM_HERO_GROUND_SPEED = 0x194,     /* ground_speed */
-    BM_HERO_STATE_TIMER = 0x198,      /* state_timer: ticks in the current state */
-    BM_HERO_GROUND_DISTANCE = 0x2DC,  /* ground_distance: height above the ground */
-    BM_HERO_UNK308 = 0x308,           /* s16: magnet-ground mode, tested before the stick steers */
-    BM_HERO_AIR_FRAMES = 0x30E,       /* s16: ticks off the ground */
-    BM_HERO_TURNAROUND = 0x3BE,       /* s16 unk3BE: the run's turnaround flag */
-    BM_HERO_PAST_APEX = 0x41E,        /* s16 past_jump_apex */
-    BM_HERO_RAIL_LAND = 0x418,        /* s32 rail_land_frames: the wrench reads Square as on foot */
-    BM_HERO_TAKEOFF_FRAME = 0x420,    /* takeoff_frame */
-    BM_HERO_AIR_STICK_SPEED = 0x424,  /* air_stick_speed */
-    BM_HERO_APEX_FRAME = 0x440,       /* apex_anim_frame: jump animation frame at the apex */
-    BM_HERO_TARGET_FRAME = 0x444,     /* target_anim_frame: jump animation frame at landing */
-    BM_HERO_FRAMES_TO_LAND = 0x44C,   /* frames_to_land */
+    BM_HERO_VELOCITY = 0xE0,         /* the run's velocity, set by set_planar_vel */
+    BM_HERO_FACING = 0x98,           /* motion.rot.z */
+    BM_HERO_MOMENTUM = 0x150,        /* motion.momentum, a vector: idle slides out on it */
+    BM_HERO_SPEED_XY = 0x160,        /* motion.speed_xy: over 2.7 the run exits to STOP */
+    BM_HERO_FLAT_SPEED = 0x164,      /* motion.flat_speed */
+    BM_HERO_STICK_DIR = 0x170,       /* the stick's way in the world (stick_target); turn_to turns
+                                         to it, not to the move yaw, under a surface's gravity */
+    BM_HERO_MOVE_YAW = 0x180,        /* motion.move_yaw: stick yaw plus camera yaw */
+    BM_HERO_YAW_RATE = 0x184,        /* motion.yaw_rate */
+    BM_HERO_YAW_ERROR = 0x188,       /* motion.yaw_error: move yaw minus facing, after the turn */
+    BM_HERO_TARGET_SPEED = 0x190,    /* target_speed */
+    BM_HERO_GROUND_SPEED = 0x194,    /* ground_speed */
+    BM_HERO_STATE_TIMER = 0x198,     /* state_timer: ticks in the current state */
+    BM_HERO_GROUND_NORMAL = 0x270,   /* ground_normal: the surface's up under a surface's gravity */
+    BM_HERO_GROUND_DISTANCE = 0x2DC, /* ground_distance: height above the ground */
+    BM_HERO_UNK308 = 0x308,          /* s16: magnet-ground mode, tested before the stick steers */
+    BM_HERO_AIR_FRAMES = 0x30E,      /* s16: ticks off the ground */
+    BM_HERO_TURNAROUND = 0x3BE,      /* s16 unk3BE: the run's turnaround flag */
+    BM_HERO_PAST_APEX = 0x41E,       /* s16 past_jump_apex */
+    BM_HERO_RAIL_LAND = 0x418,       /* s32 rail_land_frames: the wrench reads Square as on foot */
+    BM_HERO_TAKEOFF_FRAME = 0x420,   /* takeoff_frame */
+    BM_HERO_AIR_STICK_SPEED = 0x424, /* air_stick_speed */
+    BM_HERO_APEX_FRAME = 0x440,      /* apex_anim_frame: jump animation frame at the apex */
+    BM_HERO_TARGET_FRAME = 0x444,    /* target_anim_frame: jump animation frame at landing */
+    BM_HERO_FRAMES_TO_LAND = 0x44C,  /* frames_to_land */
     BM_HERO_AIR_TARGET_SPEED = 0x454, /* air_target_speed: state 0xB's push along takeoff yaw */
     BM_HERO_UNK450 = 0x450,           /* s32 unk450: 3 for a high jump whose Square opens later */
     BM_HERO_DRIFT_SPEED = 0x458,      /* high_jump_drift_speed */

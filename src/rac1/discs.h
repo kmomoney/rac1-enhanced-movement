@@ -37,6 +37,8 @@ typedef struct bm_disc {
 
     /* The follow camera's gain, also in level 0's program (DESIGN.md section 8). */
     uint32_t cam_gain; /* follow_cam_setting_value: the turn gain, copied from the yaw rate table */
+    uint32_t cam_matrix; /* player_camera_matrix: its rows; stick_target turns the stick by them, so
+                            row 0 is the way the stick's forward goes */
 
     /* Game functions the mod calls, each one function in every level (us_map.tsv). */
     const char* orbit_clamp;    /* void (int): set_follow_camera_orbit_clamp_mode */
@@ -62,6 +64,7 @@ static const bm_disc k_bm_discs[] = {
         0x0015F040u, /* D_L00_0015F040 follow_cam_turn_blend_weight */
         0x0017A780u, /* D_L00_0017A780 hero_eases */
         0x0015F044u, /* D_L00_0015F044 follow_cam_setting_value */
+        0x001670D0u, /* D_L00_001670D0 player_camera_matrix */
         "func_L00_002E9A18",
         "func_L00_002E9AF8",
         "func_L00_002E9A40",
@@ -82,6 +85,7 @@ static const bm_disc k_bm_discs[] = {
         0x0015EF40u,
         0x0017A680u,
         0x0015EF44u, /* D_L00_0015EF44 (NTSC decomp: follow_camera_update) */
+        0x00166FD0u, /* player_camera_matrix (PAL's less 0x100, as camera_lateral_axis) */
         "FUN_L00_002e8568",
         "FUN_L00_002e8648",
         "FUN_L00_002e8590",

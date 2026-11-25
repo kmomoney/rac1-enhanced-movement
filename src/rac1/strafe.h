@@ -253,4 +253,50 @@ static inline int bm_anim_crossed_back(int from, int to, int at, int wrapped) {
     return at <= from || to < at;
 }
 
+/* Sets `out` to his velocity while strafing under a surface's gravity, where rac1's set_planar_vel
+ * only moves him along his facing: `speed` along the stick's way in the world (`stick`, from
+ * stick_target) laid flat on the surface (`normal`, its up). Returns 0, leaving `out` alone, when
+ * the normal is unknown or the stick points along it. */
+static inline int bm_surface_strafe_velocity(
+    const float stick[3], const float normal[3], float speed, float out[3]
+) {
+    const float nn = normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2];
+
+    // No normal: the probe found no ground.
+    if (nn < 1e-6f) {
+        return 0;
+    }
+
+    // The stick's way less its part along the normal lies on the surface.
+    const float along = (stick[0] * normal[0] + stick[1] * normal[1] + stick[2] * normal[2]) / nn;
+    float flat[3] =
+        {stick[0] - along * normal[0], stick[1] - along * normal[1], stick[2] - along * normal[2]};
+    const float len = sqrtf(flat[0] * flat[0] + flat[1] * flat[1] + flat[2] * flat[2]);
+
+    // The stick points into or out of the surface: no way along it.
+    if (len < 1e-4f) {
+        return 0;
+    }
+
+    out[0] = flat[0] / len * speed;
+    out[1] = flat[1] / len * speed;
+    out[2] = flat[2] / len * speed;
+    return 1;
+}
+
+/* Returns whether the gravity lets him strafe: normal gravity (mode 0), or a surface's gravity while
+ * he is in none of the Magneboots' own states. rac1's Magneboots walk him in their own states, where
+ * rac2's strafe has no place; a mod that plays magnetic surfaces as plain ground (Going Commando's
+ * Gravity Boots) runs and jumps there in the plain states, under the surface's gravity (mode 1). */
+static inline int bm_strafe_gravity_ok(int gravity_mode, int state) {
+    // Normal gravity.
+    if (gravity_mode == 0) {
+        return 1;
+    }
+
+    // A surface's gravity, outside the Magneboots' walk, wrench swing and hop.
+    return gravity_mode == 1 && state != RAC1_STATE_MAGNET_WALK && state != RAC1_STATE_MAGNET_WRENCH
+           && state != RAC1_STATE_MAGNET_HOP;
+}
+
 #endif /* RAC1_ENHANCED_MOVEMENT_STRAFE_H */

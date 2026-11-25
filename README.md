@@ -163,8 +163,9 @@ only changes how your own character moves.
 - **No backpedal animation:** moving back while strafing plays the walk or run
   in reverse.
 - **No strafing** under a level's fixed camera (such as Kalebo III's arena),
-  on magnetic surfaces (Magneboots), or in the long jump (as in Going
-  Commando).
+  in the Magneboots' own walk on magnetic surfaces, or in the long jump (as in
+  Going Commando). With a mod that plays magnetic surfaces as plain ground,
+  such as Going Commando Magneboots, you strafe there too.
 - **On ice and on conveyors,** Ratchet runs as in the first game.
 - **Heli-pack and falls:** a few small Going Commando differences in the
   hover, the glide and how fast he starts to fall are out of the mod's reach.

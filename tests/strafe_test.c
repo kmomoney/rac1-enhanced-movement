@@ -185,11 +185,60 @@ static void anim(void) {
     CHECK_EQ(bm_anim_crossed_back(5, 60, 30, 1), 0);
 }
 
+/* Tests the gravity's part: normal gravity, and a surface's outside the Magneboots' own states. */
+static void gravity(void) {
+    // Normal gravity strafes in any state.
+    CHECK_EQ(bm_strafe_gravity_ok(0, RAC1_STATE_RUN), 1);
+    CHECK_EQ(bm_strafe_gravity_ok(0, RAC1_STATE_MAGNET_WALK), 1);
+
+    // A surface's gravity in the plain run, idle and jump (Gravity Boots played as plain ground).
+    CHECK_EQ(bm_strafe_gravity_ok(1, RAC1_STATE_RUN), 1);
+    CHECK_EQ(bm_strafe_gravity_ok(1, RAC1_STATE_IDLE), 1);
+    CHECK_EQ(bm_strafe_gravity_ok(1, RAC1_STATE_JUMP), 1);
+
+    // The Magneboots' own walk, wrench swing and hop do not.
+    CHECK_EQ(bm_strafe_gravity_ok(1, RAC1_STATE_MAGNET_WALK), 0);
+    CHECK_EQ(bm_strafe_gravity_ok(1, RAC1_STATE_MAGNET_WRENCH), 0);
+    CHECK_EQ(bm_strafe_gravity_ok(1, RAC1_STATE_MAGNET_HOP), 0);
+
+    // Any other gravity mode does not either.
+    CHECK_EQ(bm_strafe_gravity_ok(2, RAC1_STATE_RUN), 0);
+}
+
+/* Tests the velocity along the stick on a surface. */
+static void surface(void) {
+    float v[3] = {9.0f, 9.0f, 9.0f};
+
+    // On a wall facing +x (its up is +x), a stick up and to the side keeps both parts, at speed 2.
+    const float wall[3] = {1.0f, 0.0f, 0.0f};
+    const float stick[3] = {0.5f, 0.0f, 1.0f};
+    CHECK_EQ(bm_surface_strafe_velocity(stick, wall, 2.0f, v), 1);
+    CHECK_NEAR(v[0], 0.0f, 1e-5f);
+    CHECK_NEAR(v[1], 0.0f, 1e-5f);
+    CHECK_NEAR(v[2], 2.0f, 1e-5f);
+
+    // A sideways stick on the floor stays sideways, whatever the normal's length.
+    const float floor2[3] = {0.0f, 0.0f, 2.0f};
+    const float side[3] = {0.0f, -0.3f, 0.4f};
+    CHECK_EQ(bm_surface_strafe_velocity(side, floor2, 1.0f, v), 1);
+    CHECK_NEAR(v[1], -1.0f, 1e-5f);
+    CHECK_NEAR(v[2], 0.0f, 1e-5f);
+
+    // No normal, or a stick straight into the surface, leaves the velocity alone.
+    const float none[3] = {0.0f, 0.0f, 0.0f};
+    v[0] = 7.0f;
+    CHECK_EQ(bm_surface_strafe_velocity(side, none, 1.0f, v), 0);
+    CHECK_EQ(bm_surface_strafe_velocity(wall, wall, 1.0f, v), 0);
+    CHECK_NEAR(v[0], 7.0f, 0.0f);
+}
+
 int main(void) {
     sectors();
     sides();
     moves();
     drift();
     anim();
+    gravity();
+    surface();
     CHECK_DONE("strafe");
 }
